@@ -1,12 +1,12 @@
-import React from 'react';
+import React from 'react'
+import Title from './components/Title'
+import Upload from './components/Upload'
 
-
-function App() {
-  return (
+const App: React.FunctionComponent = () => (
     <div className="App">
-      App
+        <Title />
+        <Upload />
     </div>
-  );
-}
+)
 
-export default App;
+export default App
