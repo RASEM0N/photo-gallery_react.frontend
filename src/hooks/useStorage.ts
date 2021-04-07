@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fbStorage } from '../firebase/config'
+import { fbFirestore, fbStorage, timestamp } from '../firebase/config'
 
 const useStorage = (file: File) => {
     const [error, setError] = useState<any>(null)
@@ -9,6 +9,7 @@ const useStorage = (file: File) => {
     useEffect(() => {
         // references
         const storageRef = fbStorage.ref(file.name)
+        const collectionRef = fbFirestore.collection('images')
 
         // async
         // события на изменение состояние (для этого нам и progress
@@ -25,7 +26,12 @@ const useStorage = (file: File) => {
                 setError(err)
             },
             async () => {
-                const url: string = await storageRef.getDownloadURL()
+                const url = await storageRef.getDownloadURL()
+                const createAt = await timestamp()
+                await collectionRef.add({
+                    url,
+                    createAt,
+                })
                 setUrl(url)
             }
         )
