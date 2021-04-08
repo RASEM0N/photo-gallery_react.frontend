@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
 import { fbFirestore, fbStorage, timestamp } from '../firebase/config'
 
-const useStorage = (file: File) => {
+interface IStorage {
+    (file: File): { error: any; progress: number; url: string | null }
+}
+
+const useStorage: IStorage = (file) => {
     const [error, setError] = useState<any>(null)
     const [progress, setProgress] = useState<number>(0)
     const [url, setUrl] = useState<string | null>(null)
 
     useEffect(() => {
         // references
-        const storageRef = fbStorage.ref(file.name)
-        const collectionRef = fbFirestore.collection('images')
+        const storageRef = fbStorage.ref(file.name) // for upload a photo
+        const collectionRef = fbFirestore.collection('images') // for database
 
         // async
         // события на изменение состояние (для этого нам и progress
@@ -19,15 +23,16 @@ const useStorage = (file: File) => {
             (snap) => {
                 // bytesTransferred сколько загруженно
                 // totalBytes и так понятно
-                let percentage = (snap.bytesTransferred / snap.totalBytes) * 100
+                let percentage: number =
+                    (snap.bytesTransferred / snap.totalBytes) * 100
                 setProgress(percentage)
             },
             (err) => {
                 setError(err)
             },
             async () => {
-                const url = await storageRef.getDownloadURL()
-                const createAt = await timestamp()
+                const url: any = await storageRef.getDownloadURL()
+                const createAt: any = await timestamp()
                 await collectionRef.add({
                     url,
                     createAt,
