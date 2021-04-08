@@ -5,8 +5,7 @@
 /.pnp
 .pnp.js
 
-# config
-src/firebase
+
 
 .idea
 
