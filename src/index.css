@@ -82,7 +82,7 @@ label:hover{
     /* padding controls height, will always be perfectly square regardless of width */
     height: 300px;
     width: 100%;
-    opacity: 0.87;
+    opacity: 0.8;
     display: flex;
     background-color: #f7f7f7;
 
